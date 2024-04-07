@@ -1,0 +1,10 @@
+PyMuPDF 
+pymupdf-fonts 
+fonttools 
+pandas 
+ipykernel 
+openpyxl 
+Pillow 
+python-dotenv
+gensim
+git+https://github.com/APCLab/jieba-tw.git
