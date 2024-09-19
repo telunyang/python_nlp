@@ -67,50 +67,26 @@ if not os.path.exists(img_dir):
 t1 = time.time()
 
 '''
-年報列表
-
-2021年報_1103嘉泥.pdf
-2021年報_1477聚陽.pdf
-2021年報_1477聚陽_修正後.pdf
-2021年報_1711永光.pdf
-2021年報_1734杏輝.pdf
-2021年報_2303聯電.pdf
-2021年報_2330台積電.pdf
-2021年報_2352佳世達.pdf
-2021年報_2352佳世達_修正後(英文).pdf
-2021年報_2488漢平.pdf
-2021年報_2606裕民.pdf
-2021年報_2633台灣高鐵.pdf
-2021年報_3033威健.pdf
-2021年報_6183關貿.pdf
-2021年報_6505台塑化.pdf
-2021年報_6505台塑化_修正後(英文版).pdf
-'''
-
-'''
 指令參(引)數設定
 
-$ python run_data_processing.py --db_file=2330.db --pdf_file=pdf/2022_2330.pdf
 $ python run_data_processing.py --db_file=2633.db --pdf_file=pdf/2021_2633.pdf
-$ python run_data_processing.py --db_file=2303.db --pdf_file=pdf/2021_2303.pdf
 '''
 
+try:
+    # 取得頁數
+    for index, page in enumerate(doc):
+        # 頁碼
+        page_num = index + 1
 
-# 取得頁數
-for index, page in enumerate(doc):
-    # 頁碼
-    page_num = index + 1
+        print(f"正在處理: 第 {page_num} 頁...")
 
-    print(f"正在處理: 第 {page_num} 頁...")
+        # 取得頁面文字
+        text = page.get_text()
+        # logger.error(text[:50])
 
-    # 取得頁面文字
-    text = page.get_text()
-    # logger.error(text[:50])
+        # SQL 字串初始化
+        sql = ''
 
-    # SQL 字串初始化
-    sql = ''
-
-    try:
         # 判斷是否為圖片
         if len(text) < 3:
             logger.info(f'Page {page_num}: image')
@@ -205,18 +181,18 @@ for index, page in enumerate(doc):
                 data = (page_num, "word,no-table", text)
                 cursor.execute(sql, data)  
 
-        conn.commit()
-    except Exception as e:
-        conn.rollback()
+    conn.commit()
+except Exception as e:
+    conn.rollback()
+finally:
+    # 關閉檔案
+    doc.close()
 
-# 關閉檔案
-doc.close()
-
-# 關閉 sqlite
-cursor.close()
-conn.close()
+    # 關閉 sqlite
+    cursor.close()
+    conn.close()
 
 t2 = time.time()
 
 # 顯示執行時間
-print(f"執行時間: {t2-t1} 秒")
+print(f"執行時間: {t2-t1} 秒 => {(t2-t1)/60} 分鐘 => {(t2-t1)/3600} 小時")

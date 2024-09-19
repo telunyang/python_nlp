@@ -7,4 +7,6 @@ openpyxl
 Pillow 
 python-dotenv
 gensim
+pytesseract
+opencv-python
 git+https://github.com/APCLab/jieba-tw.git

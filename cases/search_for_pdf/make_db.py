@@ -36,7 +36,7 @@ def make_db(db_path):
 if __name__ == "__main__":
     # 取得 cmd 引數
     parser = argparse.ArgumentParser(description='新增資料庫')
-    parser.add_argument('--db_path', default='2330.db', help='資料庫檔案名稱', type=str)
+    parser.add_argument('--db_path', default='2633.db', help='資料庫檔案名稱', type=str)
     args = parser.parse_args()
 
     # 建立資料庫
@@ -45,7 +45,5 @@ if __name__ == "__main__":
 '''
 指令:
 
-$ python make_db.py --db_path=2330.db
 $ python make_db.py --db_path=2633.db
-$ python make_db.py --db_path=2303.db
 '''
