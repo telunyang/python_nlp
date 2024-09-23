@@ -29,16 +29,26 @@ index_path = './vector.index'
 bi_encoder = SentenceTransformer(model_name)
 
 # 「句子」與對應的「句子 ID」(需要 int)
-listSentences = [
+docs = [
     '我每天都被自己帥醒，壓力好大', 
     '別瞎掰好嗎', 
     '願你有個美好的一天', 
 ]
-listIds = [1, 2, 3]
+doc_ids = [0, 1, 2]
+
+# # 一堆句子 (也可以是一篇文章)
+# docs = []
+# with open("../colab_test/reviews.txt", "r", encoding="utf-8") as file:
+#     id = 0
+#     for line in file:
+#         document = line.split("\t")[0]
+#         docs.append(document.replace('"', ''))
+#         doc_ids.append(id)
+#         id += 1
 
 # 將所有句子轉換成向量，同時計算轉向量時間
 embeddings = bi_encoder.encode(
-    listSentences, 
+    docs, 
     batch_size=4,
     show_progress_bar=True,
     normalize_embeddings=False # 建議先查詢預訓練模型是否支援
@@ -54,7 +64,7 @@ else:
     index = faiss.read_index(index_path)
 
 # 加入 doc id 到 對應的 vector
-index.add_with_ids(embeddings, listIds) # 加入 向量 與 文件ID
+index.add_with_ids(embeddings, doc_ids) # 加入 向量 與 文件ID
 # index.add(embeddings) # 僅加入向量
 
 # 儲存索引
