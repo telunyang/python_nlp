@@ -4,6 +4,7 @@
 import os
 from sentence_transformers import SentenceTransformer
 import faiss
+import json
 
 # 索引預設變數
 index = None
@@ -28,28 +29,19 @@ index_path = './vector.index'
 # 讀取 model
 bi_encoder = SentenceTransformer(model_name)
 
-# 「句子」與對應的「句子 ID」(需要 int)
-docs = [
-    '我每天都被自己帥醒，壓力好大', 
-    '別瞎掰好嗎', 
-    '願你有個美好的一天', 
-]
-doc_ids = [0, 1, 2]
-
-# # 一堆句子 (也可以是一篇文章)
-# docs = []
-# with open("../colab_test/reviews.txt", "r", encoding="utf-8") as file:
-#     id = 0
-#     for line in file:
-#         document = line.split("\t")[0]
-#         docs.append(document.replace('"', ''))
-#         doc_ids.append(id)
-#         id += 1
+# 讀取問答資料：「句子」與對應的「句子 ID」(需要 int)
+docs = []
+doc_ids = []
+with open('../lm_studio/qa.json', 'r', encoding='utf-8') as f:
+    li_qa = json.loads(f.read())
+    for index, qa in enumerate(li_qa):
+        docs.append(qa['Q'])
+        doc_ids.append(int(index))
 
 # 將所有句子轉換成向量，同時計算轉向量時間
 embeddings = bi_encoder.encode(
     docs, 
-    batch_size=4,
+    batch_size=8,
     show_progress_bar=True,
     normalize_embeddings=False # 建議先查詢預訓練模型是否支援
 )
@@ -69,6 +61,3 @@ index.add_with_ids(embeddings, doc_ids) # 加入 向量 與 文件ID
 
 # 儲存索引
 faiss.write_index(index, index_path)
-
-# 釋放記憶體
-del index, embeddings

@@ -16,7 +16,7 @@
 
 ## 套件安裝
 ```bash
-pip install openai requests flask
+pip install openai requests flask sentence-transformers
 ```
 
 ## 模型使用範例

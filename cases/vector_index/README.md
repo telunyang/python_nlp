@@ -6,7 +6,7 @@
 - 使用 FAISS 建立向量索引
   - [安裝說明](https://github.com/facebookresearch/faiss/blob/main/INSTALL.md)
   - 安裝指令:
-    - `conda install -c pytorch faiss-cpu=1.8.0` 或 `conda install -c conda-forge faiss-cpu`
+    - `conda install -c pytorch faiss-cpu=1.10.0` 或 `conda install -c conda-forge faiss-cpu`
 - 安裝 Sentence Transformers
   - [安裝說明](https://sbert.net/docs/installation.html)
   - 安裝指令:
