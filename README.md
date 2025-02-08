@@ -19,24 +19,11 @@ Python 自然語言處理講義與範例
   - 下載資料集的方法：
     - 按下頁面右邊的 `Use this dataset`，然後選擇合適的 `library`，例如 `pandas`，然後複製官方提供的範例。
 	- 按下 `Files and versions`，裡面有 `data.csv`，按下 `Download file` (一個下載的 icon)，可以直接另存新檔到硬碟當中。
-  - labels 轉換的方法：
-	- 使用 `sklearn.preprocessing.LabelEncoder` 來轉換。`也可以自訂轉換方式`
-		```
-		例如:
-		0: "平淡語氣",
-		1: "關切語調",
-		2: "開心語調",
-		3: "憤怒語調",
-		4: "悲傷語調",
-		5: "疑問語調",
-		6: "驚奇語調",
-		7: "厭惡語調"
-		```
-	- 轉換後的 labels 會是 `0` 到 `7`。
-  - 預測以下文字，並且輸出預測的結果，以及 confidence:
+  - 訓練資料的 `label` 是文字，但微調時只能使用整數 `0, 1, 2, 3, ...` 等數值型態，需要進行轉換。
+  - 預測以下文字，並且輸出預測的結果，以及 score (confidence，取得小數點後面第 2 位):
     ```
 	texts = [
-        "我每天都能跟她一起上學，我好開心！",
+		"我每天都能跟她一起上學，我好開心！",
 		"最好的朋友要離開臺灣了，以後可能不容易再見面...",
 		"我覺得我快不行了...",
 		"剛剛收到研究所錄取的通知書！",
@@ -45,14 +32,14 @@ Python 自然語言處理講義與範例
 	```
 	- 範例:
 	  ```
-	  他們兩個竟然牽手了! => 驚奇語調 (0.8)
-	  有人在背後說我胖！幹! => 憤怒語調 (0.9)
-	  我媽終於要讓我養狗了 => 開心語調 (0.8)
+	  他們兩個竟然牽手了! => 驚奇語調 (0.91)
+	  有人在背後說我胖！幹! => 憤怒語調 (0.95)
+	  我媽終於要讓我養狗了 => 開心語調 (0.82)
 	  ...
 	  ```
   - `80` 分條件
     - 讀取自行微調 (finetune) 好的 bert 模型，並且預測以上的文字。
-	- 不用給我看程式碼，只要錄製的時候執行進行預測 (不需要錄如何微調)，按照範例來顯示結果。
+	- 不用給我看程式碼，錄製的時候包括 `微調過程 ` 與 `執行預測`，按照範例來顯示結果。
   - `100` 分條件 (基於 `80` 分條件)
       - 使用 `GitHub` 平台來提交作業，並且將 `github repo 連結` 以及 `影片連結` 連結寄給我。
         - Git 與 GitHub 使用教學: [程式與網頁開發者必備技能！Git 和 GitHub 零基礎快速上手，輕鬆掌握版本控制的要訣！](https://www.youtube.com/watch?v=FKXRiAiQFiY)
@@ -62,7 +49,7 @@ Python 自然語言處理講義與範例
 		  - [Git Large File Storage - An open source Git extension for versioning large files](https://git-lfs.com/)
 		  - [我如何使用 Git LFS 來託付大型 Git 檔案？](https://www.webdong.dev/zh-tw/post/how-i-use-git-lfs-to-manage-large-git-files/)
         ```
-		output/ (這裡放置你微調後的模型)
+		output/ (這裡放置你微調後的模型，不需要包括 checkpoint-* 資料夾)
         finetune.ipynb (或 .py，微調用)
 		predict.ipynb (或 .py，預測用)
         README.md

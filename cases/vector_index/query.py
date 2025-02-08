@@ -39,4 +39,4 @@ with open('../lm_studio/qa.json', 'r', encoding='utf-8') as f:
 for index, li_ids in enumerate(list_ids):
     print(f"查詢問題: {list_query[index]}")
     for id in li_ids:
-        print(f"- 相似問題: {li_qa[id]['Q']}，Document ID: {i}，相似度: {list_scores[ index ][ li_ids.index(id) ]}")
+        print(f"- 相似問題: {li_qa[id]['Q']}，Document ID: {id}，相似度: {list_scores[ index ][ li_ids.index(id) ]}")

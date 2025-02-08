@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template
 from openai import OpenAI
-from modules.bm25 import bm25_similarity, get_page_score, load_qa, get_questions, tokenize
+from modules.bm25 import load_qa
 from sentence_transformers import SentenceTransformer
 import faiss
 
