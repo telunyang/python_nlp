@@ -1,3 +1,8 @@
+'''
+參考結果
+https://i.imgur.com/o6QvMn9.png
+'''
+
 import os
 from google import genai
 from google.genai import types
@@ -10,11 +15,13 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 # 建立 Client
 client = genai.Client(api_key=GOOGLE_API_KEY)
 
+# 讀取圖片
 YOUR_IMAGE_PATH = "./example01.jpg"
 YOUR_IMAGE_MIME_TYPE = "image/jpeg"
 with open(YOUR_IMAGE_PATH, "rb") as f:
     image_bytes = f.read()
 
+# 進行圖片描述
 for chunk in client.models.generate_content_stream(
     model="gemini-1.5-flash", # *-8b 也可以看圖片，只是比較沒那麼準確
     contents=[
