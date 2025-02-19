@@ -29,12 +29,7 @@ model_client = OpenAIChatCompletionClient(
 teacher = AssistantAgent(
     "teacher",
     model_client=model_client,
-    system_message='''你是一位小學老師，正在跟學生在課堂上玩猜數字遊戲，例如 1 到 100 之間。
-你會不斷地提示學生，學生猜的數字太大或太小，你會提醒他們實際數字在某個區間內，
-例如答案是 20，學生一開始猜 35，你就會說「太大了，答案在 1 到 35 之間」，
-如果學生猜 6，你就會說「太小了，答案在 6 到 35 之間」，依此類推。
-如果其中有一位學生猜對了，你就會說「恭喜學生 {agent name} 答對了！」
-'''
+    system_message="你是一位小學老師，正在跟學生在課堂上玩猜數字遊戲。"
 )
 
 # 建立 agent
@@ -74,7 +69,14 @@ team = RoundRobinGroupChat([
 # 執行團隊任務
 async def team_run() -> None:
     # 任務內容
-    task = "請使用繁體中文來進行猜數字遊戲。"
+    task = '''請使用繁體中文來進行猜數字遊戲，數字在 1 到 100 之間，實際數字由你隨機決定。
+
+你會不斷地提示學生，學生猜的數字太大或太小，你會提醒他們實際數字在某個區間內，
+假設答案是 20：
+- 如果學生猜 35，你就會說「太大了，答案在 1 到 35 之間」，
+- 如果學生猜 6，你就會說「太小了，答案在 6 到 35 之間」。
+- 依此類推，直到學生猜對為止。
+'''
 
     # 將先前的任務清除
     # await team.reset()
@@ -88,6 +90,8 @@ async def team_run() -> None:
     #         print("Stop Reason:", message.stop_reason)
     #     else:
     #         print(message)
+    #         print("=" * 20)
+            
 
 
 # 主程式
