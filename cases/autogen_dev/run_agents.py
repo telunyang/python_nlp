@@ -5,6 +5,11 @@ from autogen_agentchat.messages import TextMessage
 from autogen_agentchat.ui import Console
 from autogen_core import CancellationToken
 from autogen_ext.models.openai import OpenAIChatCompletionClient
+
+
+'''
+使用 Gemini
+'''
 from dotenv import load_dotenv
 load_dotenv(override=True)
 
@@ -20,8 +25,31 @@ model = "gemini-1.5-flash-8b"
 # 模型變數初始化
 model_client = OpenAIChatCompletionClient(
     model=model,
-    api_key=api_key
+    api_key=api_key,
+	model_info={
+        "vision": False,
+        "function_calling": False,
+        "json_output": False,
+        "family": "unknown",
+    },
 )
+
+
+'''
+使用 ollama
+'''
+# 模型變數初始化 (在這裡使用 ollama，下載 llama 3.3 70b 量化模型)
+# model_client = OpenAIChatCompletionClient(
+#     model="llama3.3:latest",
+#     base_url="http://localhost:11434/v1",
+#     api_key="placeholder",
+#     model_info={
+#         "vision": False,
+#         "function_calling": True,
+#         "json_output": False,
+#         "family": "unknown",
+#     },
+# )
 
 # 定義一個簡單的函式 (tool function)
 async def web_search(query: str) -> str:

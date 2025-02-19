@@ -10,18 +10,49 @@ from autogen_core import CancellationToken
 from autogen_ext.models.openai import OpenAIChatCompletionClient
 
 
-# 模型變數初始化 (在這裡使用 ollama，下載 llama 3.3 70b 量化模型)
+'''
+使用 Gemini
+'''
+from dotenv import load_dotenv
+load_dotenv(override=True)
+
+
+# 輸入你的 Google API Key
+api_key = os.getenv('GOOGLE_API_KEY')
+if not api_key:
+	raise ValueError('GOOGLE_API_KEY is not set')
+
+# 設定模型
+model = "gemini-1.5-flash-8b"
+
+# 模型變數初始化
 model_client = OpenAIChatCompletionClient(
-    model="llama3.3:latest",
-    base_url="http://localhost:11434/v1",
-    api_key="placeholder",
-    model_info={
+    model=model,
+    api_key=api_key,
+	model_info={
         "vision": False,
-        "function_calling": True,
+        "function_calling": False,
         "json_output": False,
         "family": "unknown",
     },
 )
+
+
+'''
+使用 ollama
+'''
+# 模型變數初始化 (在這裡使用 ollama，下載 llama 3.3 70b 量化模型)
+# model_client = OpenAIChatCompletionClient(
+#     model="llama3.3:latest",
+#     base_url="http://localhost:11434/v1",
+#     api_key="placeholder",
+#     model_info={
+#         "vision": False,
+#         "function_calling": True,
+#         "json_output": False,
+#         "family": "unknown",
+#     },
+# )
 
 # 建立 agent
 teacher = AssistantAgent(
@@ -51,7 +82,7 @@ team = RoundRobinGroupChat([
 # 執行團隊任務
 async def team_run() -> None:
     # 任務內容
-    task = '''進行猜數字遊戲，數字在 1 到 100 之間，實際數字由你隨機決定。你會不斷地提示學生，學生猜的數字太大或太小，你會提醒他們實際數字在某個區間內，'''
+    task = '''進行猜數字遊戲，數字在 1 到 100 之間，實際數字由你決定。學生猜的數字太大或太小，你會不斷地提醒他們實際數字在某個區間內，'''
 
     # 將先前的任務清除
     # await team.reset()

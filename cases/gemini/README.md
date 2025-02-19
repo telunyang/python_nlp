@@ -11,23 +11,3 @@
 
 ### 說明
 申請完 API，請將 API Key 存放在 `.env` 檔案中，並命名為 `GOOGLE_API_KEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX`
-
----
-
-## Browser Use
-
-### 安裝 playwright
-`playwright install`
-
-註：記得先安裝 `browser-use` 套件
-
-### Chrome Driver Download
-[https://googlechromelabs.github.io/chrome-for-testing/#stable](https://googlechromelabs.github.io/chrome-for-testing/#stable)
-
-
----
-
-## AutoGen
-
-### 整合 OpenAI 套件
-- [OpenAI 相容性](https://ai.google.dev/gemini-api/docs/openai?hl=zh-tw)

@@ -2,6 +2,11 @@ import os
 import asyncio
 from autogen_core.models import UserMessage
 from autogen_ext.models.openai import OpenAIChatCompletionClient
+
+
+'''
+使用 Gemini
+'''
 from dotenv import load_dotenv
 load_dotenv(override=True)
 
@@ -25,6 +30,23 @@ model_client = OpenAIChatCompletionClient(
         "family": "unknown",
     },
 )
+
+
+'''
+使用 ollama
+'''
+# 模型變數初始化 (在這裡使用 ollama，下載 llama 3.3 70b 量化模型)
+# model_client = OpenAIChatCompletionClient(
+#     model="llama3.3:latest",
+#     base_url="http://localhost:11434/v1",
+#     api_key="placeholder",
+#     model_info={
+#         "vision": False,
+#         "function_calling": True,
+#         "json_output": False,
+#         "family": "unknown",
+#     },
+# )
 
 # 主程式
 async def main() -> None:
