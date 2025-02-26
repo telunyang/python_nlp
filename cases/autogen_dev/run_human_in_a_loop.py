@@ -22,46 +22,46 @@ from autogen_ext.models.openai import OpenAIChatCompletionClient
 '''
 使用 Gemini
 '''
-from dotenv import load_dotenv
-load_dotenv(override=True)
+# from dotenv import load_dotenv
+# load_dotenv(override=True)
 
 
-# 輸入你的 Google API Key
-api_key = os.getenv('GOOGLE_API_KEY')
-if not api_key:
-	raise ValueError('GOOGLE_API_KEY is not set')
+# # 輸入你的 Google API Key
+# api_key = os.getenv('GOOGLE_API_KEY')
+# if not api_key:
+# 	raise ValueError('GOOGLE_API_KEY is not set')
 
-# 設定模型
-model = "gemini-1.5-flash-8b"
+# # 設定模型
+# model = "gemini-1.5-flash-8b"
 
-# 模型變數初始化
-model_client = OpenAIChatCompletionClient(
-    model=model,
-    api_key=api_key,
-	model_info={
-        "vision": False,
-        "function_calling": False,
-        "json_output": False,
-        "family": "unknown",
-    },
-)
+# # 模型變數初始化
+# model_client = OpenAIChatCompletionClient(
+#     model=model,
+#     api_key=api_key,
+# 	model_info={
+#         "vision": False,
+#         "function_calling": False,
+#         "json_output": False,
+#         "family": "unknown",
+#     },
+# )
 
 
 '''
 使用 ollama
 '''
 # 模型變數初始化 (在這裡使用 ollama，下載 llama 3.3 70b 量化模型)
-# model_client = OpenAIChatCompletionClient(
-#     model="llama3.3:latest",
-#     base_url="http://localhost:11434/v1",
-#     api_key="placeholder",
-#     model_info={
-#         "vision": False,
-#         "function_calling": True,
-#         "json_output": False,
-#         "family": "unknown",
-#     },
-# )
+model_client = OpenAIChatCompletionClient(
+    model="llama3.3:latest",
+    base_url="http://localhost:11434/v1",
+    api_key="placeholder",
+    model_info={
+        "vision": False,
+        "function_calling": True,
+        "json_output": False,
+        "family": "unknown",
+    },
+)
 
 # 建立 agent
 teacher = AssistantAgent(
@@ -91,7 +91,7 @@ student_02 = AssistantAgent(
 )
 
 # 定義一個終止條件，如果評論者允者，則停止任務。
-text_termination = TextMentionTermination("猜對了")
+text_termination = TextMentionTermination("猜對了！")
 
 # 執行團隊任務
 async def team_run() -> None:
@@ -102,19 +102,24 @@ async def team_run() -> None:
     # await team.reset()
 
     # 定義所有的 agent
-    agents = [teacher, student_01, student_02, human]
+    agents = [teacher, human, student_01, student_02]
 
-    # 設定發言順序
+    # 設定發言順序。cycle() 會不斷重複迭代，直到所有 agent 都發言過一次。
     speaker_cycle = cycle(agent.name for agent in agents[1:])
 
     # 自訂選擇函數，控制發言順序
     def selector_func(messages: Sequence[AgentEvent | ChatMessage]) -> str | None:
+        # 如果沒有訊息，則由老師開始
         if not messages:
             return "teacher"
+        
+        # 如果最後一個訊息是老師發送的，則由下一位學生開始
         last_message = messages[-1]
         if last_message.source == "teacher":
+            # 透過 next() 取得下一位 agent
             return next(speaker_cycle)
         else:
+            # 如果最後一個訊息是學生發送的，則由老師開始
             return "teacher"
     
     # 建立一個團隊

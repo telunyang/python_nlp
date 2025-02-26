@@ -1,7 +1,15 @@
-import os
+'''
+Note:
+pip install -U "autogen-agentchat" "autogen-ext[openai]" "yfinance" "matplotlib"
+'''
+
 import asyncio
-from autogen_core.models import UserMessage
+from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.ui import Console
 from autogen_ext.models.openai import OpenAIChatCompletionClient
+from autogen_ext.code_executors.local import LocalCommandLineCodeExecutor
+from autogen_ext.tools.code_execution import PythonCodeExecutionTool
+
 
 
 '''
@@ -50,15 +58,25 @@ model_client = OpenAIChatCompletionClient(
 
 # 主程式
 async def main() -> None:
-    response = await model_client.create([
-        UserMessage(content="What is the capital of France?", source="user")
-    ])
+    # 自訂 tool
+    tool = PythonCodeExecutionTool(
+        LocalCommandLineCodeExecutor(work_dir="coding")
+    )
 
-    '''
-    response:
-    finish_reason='stop' content='The capital of France is Paris.' usage=RequestUsage(prompt_tokens=17, completion_tokens=8) cached=False logprobs=None thought=None
-    '''
-    print(response.content)
+    # 建立 AssistantAgent
+    agent = AssistantAgent(
+        name="Assistant",
+        model_client=model_client,
+        tools=[tool],
+        reflect_on_tool_use=True
+    )
 
-# 呼叫主程式
+    # 進入對話
+    await Console(
+        agent.run_stream(
+            task="Create a plot of MSFT stock prices in 2024 and save it to a file. Use yfinance and matplotlib."
+        )
+    )
+
+# 執行主程式
 asyncio.run(main())
