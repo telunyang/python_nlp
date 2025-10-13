@@ -1,7 +1,9 @@
 import os
+import pprint
 import asyncio
 from autogen_core.models import UserMessage
 from autogen_ext.models.openai import OpenAIChatCompletionClient
+from autogen_ext.models.ollama import OllamaChatCompletionClient
 
 
 '''
@@ -33,18 +35,19 @@ from autogen_ext.models.openai import OpenAIChatCompletionClient
 
 
 '''
-使用 ollama
+使用遠端的 ollama 伺服器 (使用 OpenAIChatCompletionClient)
 '''
-# 模型變數初始化 (在這裡使用 ollama，下載 llama 3.3 70b 量化模型)
+# 模型變數初始化
 model_client = OpenAIChatCompletionClient(
-    model="llama3.3:latest",
-    base_url="http://localhost:11434/v1",
+    model="mistral-small3.1:24",
+    base_url="http://127.0.0.1:11434/v1",
     api_key="placeholder",
     model_info={
         "vision": False,
-        "function_calling": True,
+        "function_calling": False,
         "json_output": False,
         "family": "unknown",
+        "structured_output": True,
     },
 )
 
@@ -58,7 +61,9 @@ async def main() -> None:
     response:
     finish_reason='stop' content='The capital of France is Paris.' usage=RequestUsage(prompt_tokens=17, completion_tokens=8) cached=False logprobs=None thought=None
     '''
-    print(response.content)
+    # print(response.content)
+    pprint.pprint(response)
+    pprint.pprint(response.__dict__)
 
 # 呼叫主程式
 asyncio.run(main())
