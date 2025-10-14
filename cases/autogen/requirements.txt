@@ -1,0 +1,8 @@
+autogenstudio
+autogen-agentchat
+autogen-ext[openai,ollama,docker]
+yfinance
+matplotlib
+requests
+ddgs
+googlesearch-python

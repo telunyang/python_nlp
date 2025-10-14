@@ -1,58 +1,28 @@
-'''
-Note:
-pip install -U "autogen-agentchat" "autogen-ext[openai]" "yfinance" "matplotlib"
-'''
-
 import asyncio
+import pprint
 from autogen_agentchat.agents import AssistantAgent
 from autogen_agentchat.ui import Console
 from autogen_ext.models.openai import OpenAIChatCompletionClient
+from autogen_ext.models.ollama import OllamaChatCompletionClient
 from autogen_ext.code_executors.local import LocalCommandLineCodeExecutor
 from autogen_ext.tools.code_execution import PythonCodeExecutionTool
-
-
-
-'''
-使用 Gemini
-'''
-# from dotenv import load_dotenv
-# load_dotenv(override=True)
-
-
-# # 輸入你的 Google API Key
-# api_key = os.getenv('GOOGLE_API_KEY')
-# if not api_key:
-# 	raise ValueError('GOOGLE_API_KEY is not set')
-
-# # 設定模型
-# model = "gemini-1.5-flash-8b"
-
-# # 模型變數初始化
-# model_client = OpenAIChatCompletionClient(
-#     model=model,
-#     api_key=api_key,
-# 	model_info={
-#         "vision": False,
-#         "function_calling": False,
-#         "json_output": False,
-#         "family": "unknown",
-#     },
-# )
-
+from autogen_agentchat.messages import (
+    ToolCallRequestEvent,
+    ToolCallExecutionEvent
+)
 
 '''
-使用 ollama
+使用本地的 ollama 伺服器 (使用 OllamaChatCompletionClient)
 '''
-# 模型變數初始化 (在這裡使用 ollama，下載 llama 3.3 70b 量化模型)
-model_client = OpenAIChatCompletionClient(
-    model="llama3.3:latest",
-    base_url="http://localhost:11434/v1",
-    api_key="placeholder",
+# 模型變數初始化
+model_client = OllamaChatCompletionClient(
+    model="gpt-oss:120b",
     model_info={
         "vision": False,
         "function_calling": True,
         "json_output": False,
         "family": "unknown",
+        "structured_output": True,
     },
 )
 
@@ -74,9 +44,26 @@ async def main() -> None:
     # 進入對話
     await Console(
         agent.run_stream(
-            task="Create a plot of MSFT stock prices in 2024 and save it to a file. Use yfinance and matplotlib."
+            task='''Create a plot of MSFT stock prices between 2024 and 2025 and save it to a file, afterwards, save the .py file to a file. Use yfinance and matplotlib.'''
         )
     )
+
+    # 另一種執行方式
+    # async for event in agent.run_stream(
+    #             task='''Create a plot of MSFT stock prices between 2024 and 2025 and save it to a file, afterwards, save the .py file to a file. Use yfinance and matplotlib.'''
+    # ):
+    #     print("=" * 80)
+    #     '''
+    #     pprint.pprint(type(event))
+    #     <class 'autogen_agentchat.messages.AgentStartedEvent'>
+    #     <class 'autogen_agentchat.messages.TextMessage'>
+    #     <class 'autogen_agentchat.messages.ToolCallRequestEvent'>
+    #     <class 'autogen_agentchat.messages.ToolCallExecutionEvent'>
+    #     <class 'autogen_agentchat.messages.TextMessage'>
+    #     <class 'autogen_agentchat.base._task.TaskResult'>
+    #     '''
+    #     if type(event) == ToolCallRequestEvent:
+    #         pprint.pprint(event.__dict__)
 
 # 執行主程式
 asyncio.run(main())

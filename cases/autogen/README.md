@@ -6,14 +6,25 @@
 An web-based UI for prototyping with agents without writing code. Built on AgentChat.
 ```bash
 pip install -U autogenstudio
-autogenstudio ui --port 8080 --appdir ./myapp
+autogenstudio ui --port 5566 --appdir ./myapp
 ```
 
 ## Installation
 
 ### Python 套件
+基本安裝
 ```bash
-pip install -U "autogen-agentchat" "autogen-ext[openai,ollama,anthropic]"
+pip install -r requirements.txt
+```
+
+安裝搜尋功能
+```bash
+# DuckDuckGo
+# pip install -U duckduckgo-search
+pip install -U ddgs
+
+# Google
+pip install -U googlesearch-python
 ```
 
 ### ollama
@@ -41,7 +52,7 @@ Environment="OLLAMA_MODELS=/data2/users/darren/ollama_models"
 #### 設定 keepalive
 ```
 [Service]
-Environment="OLLAMA_KEEP_ALIVE=-1"
+Environment="OLLAMA_KEEP_ALIVE=3h"
 ```
 
 #### 設定 Host IP 和 Port 
