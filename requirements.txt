@@ -1,0 +1,8 @@
+nltk
+numpy
+pandas
+svgling
+scikit-learn
+jieba
+wordcloud
+OpenCC

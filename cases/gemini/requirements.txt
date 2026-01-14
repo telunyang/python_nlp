@@ -1,4 +1,2 @@
-python-dotenv
 google-genai
-langchain-google-genai
-browser-use
+python-dotenv

@@ -23,7 +23,7 @@ with open(YOUR_IMAGE_PATH, "rb") as f:
 
 # 進行圖片描述
 for chunk in client.models.generate_content_stream(
-    model="gemini-1.5-flash", # *-8b 也可以看圖片，只是比較沒那麼準確
+    model="gemini-2.0-flash-lite",
     contents=[
         "請形容這張圖片的內容，其中有一個物件上面寫著字，請問上面寫什麼？",
         types.Part.from_bytes(data=image_bytes, mime_type=YOUR_IMAGE_MIME_TYPE),

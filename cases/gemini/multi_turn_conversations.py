@@ -11,7 +11,7 @@ client = genai.Client(api_key=GOOGLE_API_KEY)
 
 # 建立對話
 chat = client.chats.create(
-    model="gemini-1.5-flash-8b"
+    model="gemini-2.0-flash-lite"
 )
 
 # 多輪對話 - 一次性

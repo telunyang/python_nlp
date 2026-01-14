@@ -11,7 +11,7 @@ if not api_key:
 	raise ValueError('GOOGLE_API_KEY is not set')
 
 llm = ChatGoogleGenerativeAI(
-	model='gemini-1.5-flash-8b', 
+	model='gemini-2.0-flash-lite', 
 	api_key=SecretStr(api_key)
 )
 

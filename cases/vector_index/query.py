@@ -14,7 +14,7 @@ index_path = './vector.index'
 index = faiss.read_index(index_path)
 
 # 查詢句子
-list_query = ['為什麼雪是白色的', '為什麼太陽會升起和落下', '為什麼我們有五官']
+list_query = ['為何雪是白色的', '為什麼太陽會起落', '為什麼有五官']
 
 # 將查詢句子轉換成向量
 embeddings = bi_encoder.encode(
@@ -37,6 +37,7 @@ with open('../lm_studio/qa.json', 'r', encoding='utf-8') as f:
     li_qa = json.loads(f.read())
 
 for index, li_ids in enumerate(list_ids):
+    print("=" * 50)
     print(f"查詢問題: {list_query[index]}")
     for id in li_ids:
-        print(f"- 相似問題: {li_qa[id]['Q']}，Document ID: {id}，相似度: {list_scores[ index ][ li_ids.index(id) ]}")
+        print(f"相似問題: {li_qa[id]['Q']}，Document ID: {id}，相似度: {list_scores[ index ][ li_ids.index(id) ]}")
