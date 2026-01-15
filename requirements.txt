@@ -6,3 +6,5 @@ scikit-learn
 jieba
 wordcloud
 OpenCC
+gensim
+hmmlearn
