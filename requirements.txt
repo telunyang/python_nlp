@@ -8,3 +8,6 @@ wordcloud
 OpenCC
 gensim
 hmmlearn
+pymupdf
+fonttools
+pymupdf-fonts

@@ -25,6 +25,7 @@ response = client.models.generate_content(
         stop_sequences=['STOP!'],
         presence_penalty=0.0,
         frequency_penalty=0.0,
+        thinking_config=types.ThinkingConfig(thinking_level="low") # https://ai.google.dev/gemini-api/docs/thinking?hl=zh-tw#thinking-levels
     )
 )
 print(response.text)

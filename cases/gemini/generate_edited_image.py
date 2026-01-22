@@ -15,7 +15,7 @@ from PIL import Image
 from io import BytesIO
 import base64
 from dotenv import load_dotenv
-load_dotenv()
+load_dotenv(override=True)
 
 if "SSL_CERT_FILE" in os.environ:
     del os.environ["SSL_CERT_FILE"]

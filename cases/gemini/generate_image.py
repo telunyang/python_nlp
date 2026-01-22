@@ -27,7 +27,7 @@ import base64
 
 # 讀取 .env 檔案中的環境變數
 from dotenv import load_dotenv
-load_dotenv()
+load_dotenv(override=True)
 
 # 讀取 API Key
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
