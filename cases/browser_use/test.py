@@ -1,8 +1,6 @@
-from langchain_google_genai import ChatGoogleGenerativeAI
-from browser_use import Agent
-import asyncio
+from browser_use import Agent, ChatGoogle
 import os
-from pydantic import SecretStr
+import asyncio
 from dotenv import load_dotenv
 load_dotenv(override=True)
 
@@ -10,17 +8,19 @@ api_key = os.getenv('GOOGLE_API_KEY')
 if not api_key:
 	raise ValueError('GOOGLE_API_KEY is not set')
 
-llm = ChatGoogleGenerativeAI(
-	model='gemini-2.0-flash-lite', 
-	api_key=SecretStr(api_key)
+llm = ChatGoogle(
+      model='gemini-2.5-flash-lite',
+      api_key=api_key
 )
 
 async def main():
+    tast = "到網路搜尋 IG 名為「擺渡人_楊德倫」的帳號，找到帳號的簽名檔，並回傳簽名檔的內容。"
     agent = Agent(
-        task="Go to Reddit, search for 'browser-use', click on the first post and return the first comment.",
+        task=tast,
         llm=llm,
     )
     result = await agent.run()
     print(result)
 
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())

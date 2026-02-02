@@ -1,20 +1,9 @@
 import os
 import asyncio
-
+from browser_use import Agent, Browser, ChatGoogle
 from dotenv import load_dotenv
 load_dotenv(override=True)
 
-from langchain_google_genai import ChatGoogleGenerativeAI
-from pydantic import SecretStr
-from browser_use import Agent
-from browser_use.agent.views import (
-	AgentHistoryList
-)
-from browser_use.browser.browser import Browser, BrowserConfig
-from browser_use.browser.context import (
-	BrowserContextConfig,
-	BrowserContextWindowSize,
-)
 
 
 # 輸入你的 Google API Key
@@ -22,38 +11,35 @@ api_key = os.getenv('GOOGLE_API_KEY')
 if not api_key:
 	raise ValueError('GOOGLE_API_KEY is not set')
 
-# 建立 ChatGoogleGenerativeAI 物件
-llm = ChatGoogleGenerativeAI(
-	model='gemini-2.0-flash-lite', 
-	api_key=SecretStr(api_key)
+# 建立 LLM 物件
+llm = ChatGoogle(
+      model='gemini-2.5-flash-lite',
+      api_key=api_key
 )
 
 # 新增資料夾，用來存放檔案
-# folderPath = os.path.join(os.getcwd(), 'files')
-folderPath = './files'
+folderPath = os.path.join(os.getcwd(), 'files')
 os.makedirs(folderPath, exist_ok=True)
 
 # 建立 Browser 物件
 browser = Browser(
-	config=BrowserConfig(
-		# 設定下載檔案的路徑以及自動化控制瀏覽器的視窗大小
-		new_context_config=BrowserContextConfig(
-			save_downloads_path=folderPath,
-			browser_window_size=BrowserContextWindowSize(width=1500, height=700)
-		),
-	)
+	headless=False,  # 顯示瀏覽器視窗
+	download_path=folderPath,  # 設定下載路徑
+	window_size={'width': 1000, 'height': 700},  # 設定視窗大小
 )
 
 # 進行搜尋
 async def run_search(task: str):
 	agent = Agent(
-		task=task,
-		llm=llm,
-		max_actions_per_step=50,
-		browser=browser,
+		task=task, # 要完成的任務，例如「到 Google 搜尋 'ig boatman_darren_yang'，並點擊第一個連結」
+		llm=llm, # 使用的 LLM 模型
+		max_actions_per_step=50, # 每一步驟最多執行的動作數，所謂動作，是指瀏覽器的操作，例如點擊、輸入文字、滾動頁面等
+		browser=browser, # 使用的瀏覽器物件
 	)
 
-	history: AgentHistoryList = await agent.run(max_steps=100)
+	history = await agent.run(
+		max_steps=100 # 最多執行的步驟數，意思是說，整個任務最多可以分成多少個步驟來完成
+	)
 
 	# logger.info('Final Result:')
 	# logger.info(history.final_result())
@@ -67,10 +53,7 @@ async def run_search(task: str):
 	# logger.info('\nThoughts:')
 	# logger.info(history.model_thoughts())
 
-	# 關閉瀏覽器
-	await browser.close()
-
-
-
 if __name__ == '__main__':
-	asyncio.run(run_search("Go to the website \"Google\". Type the term \"楊德倫\" on search bar and press enter. Click the GitHub link."))
+	asyncio.run(
+		run_search("到網路搜尋 IG 名為「擺渡人_楊德倫」的帳號，找到帳號的簽名檔，並回傳簽名檔的內容。")
+	)
