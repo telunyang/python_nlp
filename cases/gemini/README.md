@@ -1,4 +1,5 @@
 # 透過 Google AI 的 API，來使用 Gemini 模型
+- [Gemini API 文件](https://ai.google.dev/gemini-api/docs?hl=zh-tw)
 
 ## Google AI Studio
 申請 API Key [https://aistudio.google.com/apikey](https://aistudio.google.com/apikey)

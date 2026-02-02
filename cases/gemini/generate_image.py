@@ -20,10 +20,6 @@ if "GOOGLE_API_KEY" in os.environ:
     del os.environ["GOOGLE_API_KEY"]
 
 from google import genai
-from google.genai import types
-from PIL import Image
-from io import BytesIO
-import base64
 
 # 讀取 .env 檔案中的環境變數
 from dotenv import load_dotenv
@@ -35,25 +31,20 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 # 建立 Client
 client = genai.Client(api_key=GOOGLE_API_KEY)
 
-# 類似聊天的口吻，讓模型生成圖片
-contents = ('Hi, can you create a 3d rendered image of a pig '
-            'with wings and a top hat flying over a happy futuristic scifi city '
-            'with lots of greenery?',)
+# 提示詞
+prompt = ("Create a picture of a nano banana dish in a fancy restaurant with a Gemini theme")
 
 # 取得回應
 response = client.models.generate_content(
-    model="gemini-2.0-flash-exp-image-generation",
-    contents=contents, # 依照 prompt 來生成圖片
-    config=types.GenerateContentConfig(
-        response_modalities=['TEXT', 'IMAGE']
-    )
+    model="gemini-2.5-flash-image",
+    contents=[prompt],
 )
 
 # 將回傳的圖片顯示出來 (也會存檔)
-for part in response.candidates[0].content.parts:
+for part in response.parts:
     if part.text is not None:
         print(part.text)
     elif part.inline_data is not None:
-        image = Image.open(BytesIO((part.inline_data.data)))
-        image.save('gemini_image.png')
+        image = part.as_image()
+        image.save("generated_image.png")
         image.show()
