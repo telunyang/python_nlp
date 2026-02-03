@@ -14,9 +14,9 @@ llm = ChatGoogle(
 )
 
 async def main():
-    tast = "到網路搜尋 IG 名為「擺渡人_楊德倫」的帳號，找到帳號的簽名檔，並回傳簽名檔的內容。"
+    task = "查詢臺北到臺南的高鐵時刻表，並列出今天下午三點後的班次。"
     agent = Agent(
-        task=tast,
+        task=task,
         llm=llm,
     )
     result = await agent.run()

@@ -31,7 +31,7 @@ browser = Browser(
 # 進行搜尋
 async def run_search(task: str):
 	agent = Agent(
-		task=task, # 要完成的任務，例如「到 Google 搜尋 'ig boatman_darren_yang'，並點擊第一個連結」
+		task=task, # 要完成的任務描述
 		llm=llm, # 使用的 LLM 模型
 		max_actions_per_step=50, # 每一步驟最多執行的動作數，所謂動作，是指瀏覽器的操作，例如點擊、輸入文字、滾動頁面等
 		browser=browser, # 使用的瀏覽器物件
@@ -54,6 +54,5 @@ async def run_search(task: str):
 	# logger.info(history.model_thoughts())
 
 if __name__ == '__main__':
-	asyncio.run(
-		run_search("到網路搜尋 IG 名為「擺渡人_楊德倫」的帳號，找到帳號的簽名檔，並回傳簽名檔的內容。")
-	)
+	task = "查詢臺北到臺南的高鐵時刻表，並列出今天下午三點後的班次。"
+	asyncio.run(run_search(task))

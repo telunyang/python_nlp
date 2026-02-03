@@ -12,6 +12,7 @@ client = genai.Client(api_key=GOOGLE_API_KEY)
 
 # 列出所有模型
 for model in client.models.list():
+    # 所有模型資訊
     print("-" * 50)
     pprint.pprint(model)
 
