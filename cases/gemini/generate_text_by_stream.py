@@ -11,7 +11,7 @@ client = genai.Client(api_key=GOOGLE_API_KEY)
 
 # 以串流方式生成內容
 response = client.models.generate_content_stream(
-    model="gemini-2.5-flash-lite",
+    model="gemma-4-26b-a4b-it",
     contents=["請簡單地解釋 AI 是如何運作的，只要 100 個字。"]
 )
 

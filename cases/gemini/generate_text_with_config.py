@@ -12,7 +12,7 @@ client = genai.Client(api_key=GOOGLE_API_KEY)
 
 # Generate content
 response = client.models.generate_content(
-    model="gemini-2.5-flash-lite",
+    model="gemma-4-26b-a4b-it",
     contents=["請簡單地解釋 AI 是如何運作的，只要 100 個字。"],
     config=types.GenerateContentConfig(
         system_instruction="你是一個知識淵博且樂於助人的 AI 助理。",

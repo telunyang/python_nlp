@@ -7,16 +7,20 @@
   - [安裝說明](https://github.com/facebookresearch/faiss/blob/main/INSTALL.md)
   - 安裝指令:
     - `conda install pytorch::faiss-cpu==1.12.0`
+    - `pip install faiss-cpu==1.14.2`
 - 安裝 Sentence Transformers
   - [安裝說明](https://sbert.net/docs/installation.html)
   - 安裝指令:
-    - `pip install -U sentence-transformers`
+    - `pip install -U sentence-transformers==5.5.1`
 - 範例模型
   - [Pretrained Models](https://sbert.net/docs/sentence_transformer/pretrained_models.html#semantic-search-models)
 - 執行程式
   - `python make_index.py`
   - 如果出現 `ImportError: DLL load failed while importing _multiarray_umath: 找不到指定的模組。`
-    - 步驟一: 先安裝 numpy 2.0 `pip install numpy==2.0`
+    - 步驟一: 先安裝 numpy 2.x `pip install numpy==2.4.6`
     - 步驟二: 再安裝 numpy 小於 2.0 的版本 `pip install numpy==1.26.4`
     - 步驟三: 重新執行程式 `python make_index.py`
     - 如果還有問題，可以試試安裝 `pip install pybind11==2.12`
+
+## 延伸閱讀
+- [A vector index built on TurboQuant, written in Rust with Python bindings](https://github.com/RyanCodrai/turbovec)

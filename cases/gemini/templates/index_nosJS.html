@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Assistant Chat Demo</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 30px;
+        }
+
+        #chat {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            min-height: 500px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin: 12px 0;
+            padding: 12px;
+            border-radius: 10px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+
+        .message::before {
+            content: attr(data-label) "：";
+            font-weight: bold;
+        }
+
+        .user {
+            background: #dbeafe;
+            text-align: right;
+        }
+
+        .assistant {
+            background: #eeeeee;
+        }
+
+        #form {
+            max-width: 800px;
+            margin: 20px auto;
+            display: flex;
+            gap: 10px;
+        }
+
+        #input {
+            flex: 1;
+            padding: 12px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 16px;
+        }
+
+        .cursor::after {
+            content: "▍";
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="chat"></div>
+
+    <form id="form">
+        <input id="input" type="text" placeholder="請輸入訊息">
+        <button type="submit">送出</button>
+        <button type="button" id="clear">清除</button>
+    </form>
+
+    <script>
+        
+    </script>
+
+</body>
+
+</html>

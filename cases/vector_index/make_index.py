@@ -1,6 +1,3 @@
-'''
-匯入套件
-'''
 import os
 from sentence_transformers import SentenceTransformer
 import faiss
@@ -19,18 +16,18 @@ IP = Inner Product，
 '''
 
 # 模型名稱
-model_name = 'sentence-transformers/distiluse-base-multilingual-cased-v1'
+model_name = 'BAAI/bge-m3'
 
 # 索引存放路徑
 index_path = './vector.index'
 
 # 讀取 model
-bi_encoder = SentenceTransformer(model_name)
+encoder = SentenceTransformer(model_name)
 
-# 讀取問答資料：「句子」與對應的「句子 ID」(需要 int)
+# 讀取問答資料：「文件」與對應的「文件 ID」(需要 int64)
 docs = []
 doc_ids = []
-with open('../lm_studio/qa.json', 'r', encoding='utf-8') as f:
+with open('./qa.json', 'r', encoding='utf-8') as f:
     # 讀取 json 檔案
     li_qa = json.loads(f.read())
 
@@ -43,11 +40,11 @@ with open('../lm_studio/qa.json', 'r', encoding='utf-8') as f:
     doc_ids = np.array(doc_ids).astype('int64')
 
 # 將所有句子轉換成向量，同時計算轉向量時間
-embeddings = bi_encoder.encode(
+embeddings = encoder.encode(
     docs, 
     batch_size=8,
     show_progress_bar=True,
-    normalize_embeddings=False # 建議先查詢預訓練模型是否支援
+    normalize_embeddings=True
 )
 
 # 索引預設變數
@@ -70,3 +67,4 @@ index.add_with_ids(embeddings, doc_ids) # 加入 向量 與 文件ID
 
 # 儲存索引
 faiss.write_index(index, index_path)
+print("索引已儲存到", index_path)
