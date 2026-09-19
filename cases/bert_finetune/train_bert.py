@@ -124,8 +124,10 @@ MAX_SEQ_LENGTH = 512
 # 4. 訓練設定
 # =============================================================================
 
+# 隨機種子，確保每次訓練結果可重現。
 SEED = 42
 
+# 訓練幾個 epochs。
 NUM_TRAIN_EPOCHS = 3
 
 # 一次 forward/backward 真正送進 GPU 的 examples 數。
@@ -168,7 +170,7 @@ PER_DEVICE_EVAL_BATCH_SIZE = 32
 # 因此大約每 64 筆 training examples 更新一次模型參數。
 GRADIENT_ACCUMULATION_STEPS = 2
 
-# 原 notebook 實際使用：
+# 使用：
 #
 #     0.00005 * 2
 #
@@ -187,8 +189,10 @@ LEARNING_RATE = 1e-4
 # 前 50 個 optimizer steps 做 linear warmup。
 WARMUP_STEPS = 50
 
+# 權重衰減 (weight decay)，主要是用在防止過度擬合（overfitting）。
 WEIGHT_DECAY = 0.01
 
+# 學習率調整策略 (learning rate scheduler)。
 LR_SCHEDULER_TYPE = "linear"
 
 # 每隔多少 optimizer steps 做一次 validation。
