@@ -1,20 +1,16 @@
-'''
-Ollama
-https://ollama.com/
-
-Download for Windows
-https://ollama.com/download/OllamaSetup.exe
-
-Ollama Python SDK
-https://github.com/ollama/ollama-python
-'''
-
 # 測試 ollama 遠端連線
 import requests
 
-url = "http://localhost:11434/api/tags"
+# 設定 Ollama API 的 URL
+OLLAMA_HOST = "http://localhost:11434"
+# OLLAMA_HOST = "https://112c-136-66-88-68.ngrok-free.app"
+# OLLAMA_HOST = "https://{NGROK_URL}" # 如果使用 ngrok，請取消註解並替換 {NGROK_URL} 為實際的 ngrok URL
+
 try:
-    response = requests.get(url)
+    # 發送 GET 請求到 Ollama API
+    response = requests.get(OLLAMA_HOST + "/api/tags", timeout=5)
+
+    # 檢查回應狀態碼
     if response.status_code == 200:
         print("Ollama connection successful.")
     else:

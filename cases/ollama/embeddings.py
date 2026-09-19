@@ -4,12 +4,16 @@ import asyncio
 from ollama import AsyncClient
 import time
 
+# 設定 Ollama API 的 URL
+OLLAMA_HOST = "http://localhost:11434"
+# OLLAMA_HOST = "https://112c-136-66-88-68.ngrok-free.app"
+# OLLAMA_HOST = "https://{NGROK_URL}" # 如果使用 ngrok，請取消註解並替換 {NGROK_URL} 為實際的 ngrok URL
 
 async def embed_text():
     t1 = time.time()
 
     client = await AsyncClient(
-        host='http://localhost:11434',
+        host=OLLAMA_HOST,
         timeout=600,
     )
     response = await client.embed(

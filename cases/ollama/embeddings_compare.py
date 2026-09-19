@@ -1,10 +1,13 @@
 # 取得文本的嵌入向量，並比較兩句話的相似度
-
 import asyncio
 from ollama import AsyncClient
 import time
 import math
 
+# 設定 Ollama API 的 URL
+OLLAMA_HOST = "http://localhost:11434"
+# OLLAMA_HOST = "https://112c-136-66-88-68.ngrok-free.app"
+# OLLAMA_HOST = "https://{NGROK_URL}" # 如果使用 ngrok，請取消註解並替換 {NGROK_URL} 為實際的 ngrok URL
 
 # 計算 cosine similarity
 def cosine_similarity(vector1, vector2):
@@ -35,7 +38,7 @@ async def compare_texts():
 
     # 透過 embedding model 取得兩句話的嵌入向量
     client = await AsyncClient(
-        host='http://localhost:11434',
+        host=OLLAMA_HOST,
         timeout=600,
     )
     response = await client.embed(

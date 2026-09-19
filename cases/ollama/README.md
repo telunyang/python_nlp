@@ -1,7 +1,9 @@
 # Ollama
 
 ## 安裝 Ollama
-- [Download Ollama](https://ollama.com/download/windows)
+- [Ollama](https://ollama.com/)
+- [Download for Windows](https://ollama.com/download/OllamaSetup.exe)
+- [Ollama Python SDK](https://github.com/ollama/ollama-python)
 
 ## 指令說明
 - [CLI Reference](https://docs.ollama.com/cli)
@@ -23,7 +25,3 @@ ollama run qwen3.5:0.8b
 # 圖片描述（順序不能錯）
 ollama run qwen3.5:0.8b --think=false "請描述照片的內容，以及裡面所寫的文字。" "D:\teach\restful_api_ajax\ollama\example01.jpg"
 ```
-
-## 參考網站
-- [Ollama - The easiest way to build with open models](https://ollama.com/)
-- [Ollama Python Library](https://github.com/ollama/ollama-python)

@@ -5,6 +5,11 @@ import time
 # image_path = "D:\\your\\absolute\\path\\example01.jpg"
 image_path = './example01.jpg'
 
+# 設定 Ollama API 的 URL
+OLLAMA_HOST = "http://localhost:11434"
+# OLLAMA_HOST = "https://bc92-136-66-88-68.ngrok-free.app"
+# OLLAMA_HOST = "https://{NGROK_URL}" # 如果使用 ngrok，請取消註解並替換 {NGROK_URL} 為實際的 ngrok URL
+
 messages = [
     {
         'role': 'user', 
@@ -17,12 +22,12 @@ async def recognize():
     t1 = time.time()
 
     client = AsyncClient(
-        host='http://localhost:11434',
+        host=OLLAMA_HOST,
         timeout=600
     )
     
     response = await client.chat(
-        model='qwen3.5:0.8b', 
+        model='gemma4:e2b', 
         messages=messages,
         keep_alive="1h",
         think=False,
@@ -48,7 +53,7 @@ async def recognize():
 #         timeout=600
 #     )
 #     response = await client.chat(
-#         model='qwen3.5:0.8b', 
+#         model='gemma4:e2b', 
 #         messages=messages,
 #         keep_alive="1h",
 #         stream=True,
