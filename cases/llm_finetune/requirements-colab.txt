@@ -1,0 +1,20 @@
+# Hugging Face 模型與 Trainer。
+transformers==5.17.0
+
+# Supervised fine-tuning trainer。
+trl==1.13.0
+
+# LoRA / PEFT adapter。
+peft==0.21.0
+
+# 4-bit / 8-bit 量化與 optimizer。
+bitsandbytes==0.50.2
+
+# Hugging Face dataset 下載與讀取。
+datasets==5.0.1
+
+# Trainer 的 GPU 執行支援。
+accelerate==1.15.0
+
+# Loss 曲線繪圖。
+matplotlib>=3.8
