@@ -3,20 +3,22 @@ import json
 from google import genai
 from google.genai.types import UserContent, ModelContent, Part
 from dotenv import load_dotenv
-
 load_dotenv(override=True)
 
-
+# 讀取 API Key
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-ASSISTANT_ID = os.getenv("GEMINI_ASSISTANT", "gemma-4-26b-a4b-it")
-HISTORY_FILE = "chat_history.json"
 
 if not GOOGLE_API_KEY:
     raise ValueError("找不到 GOOGLE_API_KEY，請確認 .env 是否有設定")
 
+# 建立 Client
 client = genai.Client(api_key=GOOGLE_API_KEY)
 
+MODEL_NAME = "gemma-4-26b-a4b-it"
+HISTORY_FILE = "chat_history.json"
 
+
+# 讀取歷史對話
 def load_history():
     if not os.path.exists(HISTORY_FILE):
         return []
@@ -25,24 +27,25 @@ def load_history():
         return json.load(f)
 
 
+# 儲存歷史對話
 def save_history(history):
     with open(HISTORY_FILE, "w", encoding="utf-8") as f:
         json.dump(history, f, ensure_ascii=False, indent=2)
 
 
+# 將 JSON 格式轉成 Gemini chat 需要的格式
 def build_gemini_history(history):
     gemini_history = []
 
-    for msg in history:
-        role = msg["role"]
-        text = msg["text"]
+    for message in history:
+        role = message["role"]
+        text = message["text"]
 
         if role == "user":
             gemini_history.append(
                 UserContent(parts=[Part(text=text)])
             )
-
-        elif role == "assistant":
+        elif role == "model":
             gemini_history.append(
                 ModelContent(parts=[Part(text=text)])
             )
@@ -50,69 +53,61 @@ def build_gemini_history(history):
     return gemini_history
 
 
-def create_chat(history):
-    return client.chats.create(
-        model=ASSISTANT_ID,
-        history=build_gemini_history(history)
-    )
+# 讀取之前儲存的對話
+chat_history = load_history()
+
+# 建立對話
+chat = client.chats.create(
+    model=MODEL_NAME,
+    history=build_gemini_history(chat_history)
+)
 
 
-def main():
-    chat_history = load_history()
-    chat = create_chat(chat_history)
+while True:
+    question = input("你：").strip()
 
-    print(f"系統：目前 assistant: {ASSISTANT_ID}")
-    print("系統：輸入 exit 或空白可結束；輸入 clear 可清除歷史對話。")
+    if question == "" or question == "exit":
+        break
 
-    while True:
-        try:
-            question = input("你：").strip()
-        except KeyboardInterrupt:
-            print("\n系統：收到中斷，對話結束。")
-            break
+    if question == "clear":
+        chat_history = []
+        save_history(chat_history)
 
-        if question == "" or question == "exit":
-            break
+        chat = client.chats.create(
+            model=MODEL_NAME,
+            history=[]
+        )
 
-        if question == "clear":
-            chat_history = []
-            save_history(chat_history)
-            chat = create_chat(chat_history)
-            print("系統：歷史對話已清除")
-            continue
+        print("系統：歷史對話已清除")
+        continue
 
-        print("機器人：", end="", flush=True)
+    print("機器人：", end="", flush=True)
 
-        full_reply = ""
+    full_reply = ""
 
-        try:
-            response = chat.send_message_stream(question)
+    # 串流式輸出
+    response = chat.send_message_stream(question)
 
-            for chunk in response:
-                if chunk.text:
-                    print(chunk.text, end="", flush=True)
-                    full_reply += chunk.text
+    for chunk in response:
+        if chunk.text:
+            print(chunk.text, end="", flush=True)
+            full_reply += chunk.text
 
-            print()
+    print()
 
-            chat_history.append({
-                "role": "user",
-                "text": question
-            })
+    # 將本輪對話加入歷史
+    chat_history.append({
+        "role": "user",
+        "text": question
+    })
 
-            chat_history.append({
-                "role": "assistant",
-                "text": full_reply
-            })
+    chat_history.append({
+        "role": "model",
+        "text": full_reply
+    })
 
-            save_history(chat_history)
-
-        except Exception as e:
-            print()
-            print(f"系統：呼叫 Gemini 時發生錯誤：{e}")
-
-    print(f"對話結束，歷史已儲存到 {HISTORY_FILE}")
+    # 每一輪都立刻儲存
+    save_history(chat_history)
 
 
-if __name__ == "__main__":
-    main()
+print("對話結束，歷史已儲存到 chat_history.json")

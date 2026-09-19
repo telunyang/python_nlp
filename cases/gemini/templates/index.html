@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Assistant Chat Demo</title>
+    <title>Gemini Chat Demo</title>
 
     <style>
         body {
@@ -19,8 +19,6 @@
             padding: 20px;
             border-radius: 12px;
             min-height: 500px;
-            max-height: 70vh;
-            overflow-y: auto;
         }
 
         .message {
@@ -31,17 +29,12 @@
             line-height: 1.6;
         }
 
-        .message::before {
-            content: attr(data-label) "：";
-            font-weight: bold;
-        }
-
         .user {
             background: #dbeafe;
             text-align: right;
         }
 
-        .assistant {
+        .model {
             background: #eeeeee;
         }
 
@@ -77,8 +70,10 @@
 </head>
 
 <body>
+    <!-- 對話區域 -->
     <div id="chat"></div>
 
+    <!-- 輸入區域 -->
     <form id="form">
         <input id="input" type="text" placeholder="請輸入訊息">
         <button type="submit">送出</button>
@@ -86,54 +81,67 @@
     </form>
 
     <script>
+        // 取得 DOM 元素
         const chatDiv = document.getElementById("chat");
         const form = document.getElementById("form");
         const input = document.getElementById("input");
         const clearBtn = document.getElementById("clear");
 
-        function getRoleLabel(role) {
-            if (role === "user") return "你";
-            if (role === "assistant") return "機器人";
-            return role;
-        }
-
+        // 新增訊息到對話區
         function addMessage(role, text) {
+            // 新增一個 div 來顯示訊息
             const div = document.createElement("div");
 
+            // 根據角色設定不同的樣式
             div.className = "message " + role;
-            div.dataset.label = getRoleLabel(role);
+            
+            // 設定訊息內容
             div.textContent = text;
 
+            // 將訊息加入對話區 (剛才所新增的 div)
             chatDiv.appendChild(div);
+
+            // 滾動到最新訊息
             chatDiv.scrollTop = chatDiv.scrollHeight;
 
             return div;
         }
 
+        // 讀取對話歷史
         async function loadHistory() {
+            // 從後端 API 取得歷史訊息
             const response = await fetch("/api/history");
             const history = await response.json();
 
+            // 清空對話區
             chatDiv.innerHTML = "";
 
+            // 顯示歷史訊息
             history.forEach(msg => {
                 addMessage(msg.role, msg.text);
             });
         }
 
+        // 處理表單提交
         form.addEventListener("submit", async function (event) {
+            // 阻止表單的預設行為 (頁面重新載入)
             event.preventDefault();
 
+            // 取得使用者輸入的訊息，並去除前後空白
             const message = input.value.trim();
-            if (!message) return;
+            if (!message) return; // 如果訊息為空，則不處理
 
+            // 清空輸入框
             input.value = "";
 
+            // 顯示使用者的訊息
             addMessage("user", message);
 
-            const assistantDiv = addMessage("assistant", "");
-            assistantDiv.classList.add("cursor");
+            // 顯示模型回應的 placeholder，並加上游標效果 (會閃喔)
+            const modelDiv = addMessage("model", "");
+            modelDiv.classList.add("cursor");
 
+            // 向後端 API 發送使用者訊息，並使用 Stream 方式接收模型回應
             const response = await fetch("/api/chat/stream", {
                 method: "POST",
                 headers: {
@@ -144,32 +152,41 @@
                 })
             });
 
+            // 透過 ReadableStream 逐步讀取模型回應的內容，並即時顯示在對話區
             const reader = response.body.getReader();
             const decoder = new TextDecoder("utf-8");
 
+            // 不斷讀取模型回應的內容，直到讀取完成
             while (true) {
+                // 讀取下一個 chunk 的資料
                 const result = await reader.read();
 
+                // 如果已經讀取完成，則跳出迴圈
                 if (result.done) {
                     break;
                 }
 
+                // 將讀取到的 chunk 轉換成文字，並追加到模型回應的 div 中
                 const chunk = decoder.decode(result.value);
-                assistantDiv.textContent += chunk;
-                chatDiv.scrollTop = chatDiv.scrollHeight;
+                modelDiv.textContent += chunk;
             }
 
-            assistantDiv.classList.remove("cursor");
+            // 移除游標效果
+            modelDiv.classList.remove("cursor");
         });
 
+        // 處理清除按鈕點擊事件
         clearBtn.addEventListener("click", async function () {
+            // 向後端 API 發送請求，清除對話歷史
             await fetch("/api/clear", {
                 method: "POST"
             });
 
+            // 清空對話區
             chatDiv.innerHTML = "";
         });
 
+        // 頁面載入時，讀取對話歷史
         loadHistory();
     </script>
 

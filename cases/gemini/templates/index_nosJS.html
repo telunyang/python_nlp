@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Assistant Chat Demo</title>
+    <title>Gemini Chat Demo</title>
 
     <style>
         body {
@@ -19,8 +19,6 @@
             padding: 20px;
             border-radius: 12px;
             min-height: 500px;
-            max-height: 70vh;
-            overflow-y: auto;
         }
 
         .message {
@@ -31,17 +29,12 @@
             line-height: 1.6;
         }
 
-        .message::before {
-            content: attr(data-label) "：";
-            font-weight: bold;
-        }
-
         .user {
             background: #dbeafe;
             text-align: right;
         }
 
-        .assistant {
+        .model {
             background: #eeeeee;
         }
 
@@ -77,8 +70,10 @@
 </head>
 
 <body>
+    <!-- 對話區域 -->
     <div id="chat"></div>
 
+    <!-- 輸入區域 -->
     <form id="form">
         <input id="input" type="text" placeholder="請輸入訊息">
         <button type="submit">送出</button>
