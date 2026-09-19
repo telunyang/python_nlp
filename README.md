@@ -14,82 +14,109 @@ Python 自然語言處理講義與範例
 ## 作業
 - 僅限授課學員。
 - 同學之間可以互相討論，但千萬不要抄襲。
-- 修改 `bert_finetue` 的範例，從二元分類，改成多元分類，使用的資料集如下：
-  - [Datasets:Johnson8187/Chinese_Multi-Emotion_Dialogue_Dataset](https://huggingface.co/datasets/Johnson8187/Chinese_Multi-Emotion_Dialogue_Dataset)
-  - 下載資料集的方法：
-    - 按下頁面右邊的 `Use this dataset`，然後選擇合適的 `library`，例如 `pandas`，然後複製官方提供的範例。
-	- 按下 `Files and versions`，裡面有 `data.csv`，按下 `Download file` (一個下載的 icon)，可以直接另存新檔到硬碟當中。
-  - 訓練資料的 `label` 是文字，但微調時只能使用整數 `0, 1, 2, 3, ...` 等數值型態，需要進行轉換。
-  - 預測以下文字，並且輸出預測的結果，以及 score (confidence，取得小數點後面第 2 位):
-    ```
-	texts = [
-		"我每天都能跟她一起上學，我好開心！",
-		"最好的朋友要離開臺灣了，以後可能不容易再見面...",
-		"我覺得我快不行了...",
-		"剛剛收到研究所錄取的通知書！",
-		"今年的冬天好像比較晚來。"
-    ]
+- 作業有 `3` 個：
+  - `微調 BERT，建立多元分類模型`
+	- 修改 `bert_finetue` 的範例，從二元分類，改成多元分類，使用的資料集如下：
+	- [Datasets:Johnson8187/Chinese_Multi-Emotion_Dialogue_Dataset](https://huggingface.co/datasets/Johnson8187/Chinese_Multi-Emotion_Dialogue_Dataset)
+	- 下載資料集的方法：
+	  - 按下頁面右邊的 `Use this dataset`，然後選擇合適的 `library`，例如 `pandas`，然後複製官方提供的範例。
+	  - 按下 `Files and versions`，裡面有 `data.csv`，按下 `Download file` (一個下載的 icon)，可以直接另存新檔到硬碟當中。
+	- 訓練資料的 `label` 是文字，但微調時只能使用整數 `0, 1, 2, 3, ...` 等數值型態，需要進行轉換。
+	- 預測以下文字，並且輸出預測的結果，以及 score (confidence，取得小數點後面第 `4` 位):
 	```
-	- 範例:
-	  ```
-	  他們兩個竟然牽手了! => 驚奇語調 (0.91)
-	  有人在背後說我胖！幹! => 憤怒語調 (0.95)
-	  我媽終於要讓我養狗了 => 開心語調 (0.82)
-	  ...
-	  ```
-  - `80` 分條件
-    - 讀取自行微調 (finetune) 好的 bert 模型，並且預測以上的文字。
-	- 不用給我看程式碼，錄製的時候包括 `微調過程 ` 與 `執行預測`，按照範例來顯示結果。
-  - `100` 分條件 (基於 `80` 分條件)
-      - 使用 `GitHub` 平台來提交作業，並且將 `github repo 連結` 以及 `影片連結` 連結寄給我。
-        - Git 與 GitHub 使用教學: [程式與網頁開發者必備技能！Git 和 GitHub 零基礎快速上手，輕鬆掌握版本控制的要訣！](https://www.youtube.com/watch?v=FKXRiAiQFiY)
-        - Markdown 語法: [如何使用 Markdown 語言撰寫技術文件](https://experienceleague.adobe.com/zh-hant/docs/contributor/contributor-guide/writing-essentials/markdown)
-      - `repository` 裡面至少要有 `finetune.ipynb` 或 `finetune.py`，`predict.ipynb` 或 `predict.py`，還有 `README.md`，最重要的是你微調後的模型 `output` 資料夾。
-	    - 上傳大型檔案到 github 上，請參考：
-		  - [Git Large File Storage - An open source Git extension for versioning large files](https://git-lfs.com/)
-		  - [我如何使用 Git LFS 來託付大型 Git 檔案？](https://www.webdong.dev/zh-tw/post/how-i-use-git-lfs-to-manage-large-git-files/)
-        ```
-		output/ (這裡放置你微調後的模型，不需要包括 checkpoint-* 資料夾)
-        finetune.ipynb (或 .py，微調用)
-		predict.ipynb (或 .py，預測用)
-        README.md
-        ```
-      - `README.md` 要有說明 (用 `.py` 執行要額外說明執行指令或方法)，例如:
-        ```markdown
-        # 中文句子情緒分類
+    texts = [
+        "我每天都能跟她一起上學，我好開心！",
+        "最好的朋友要離開臺灣了，以後可能不容易再見面...",
+        "我覺得我快不行了...",
+        "剛剛收到研究所錄取的通知書！",
+        "今年的冬天好像比較晚來。"
+    ]
+    ```
+    - 範例:
+    ```
+    他們兩個竟然牽手了! => 驚奇語調 (0.9168)
+    有人在背後說我胖！幹! => 憤怒語調 (0.9527)
+    我媽終於要讓我養狗了 => 開心語調 (0.8216)
+    ...
+    ```
+    - 使用 `GitHub` 平台來提交作業，並且將 `github repo 連結` 寄給我。
+    - Git 與 GitHub 使用教學: [程式與網頁開發者必備技能！Git 和 GitHub 零基礎快速上手，輕鬆掌握版本控制的要訣！](https://www.youtube.com/watch?v=FKXRiAiQFiY)
+    - Markdown 語法: [如何使用 Markdown 語言撰寫技術文件](https://experienceleague.adobe.com/zh-hant/docs/contributor/contributor-guide/writing-essentials/markdown)
+    - `repository` 裡面至少要有 `finetune.ipynb` 或 `finetune.py`，`predict.ipynb` 或 `predict.py`，還有 `README.md`，最重要的是你微調後的模型 `output` 資料夾。
+    - 上傳大型檔案到 github 上，請參考：
+        - [Git Large File Storage - An open source Git extension for versioning large files](https://git-lfs.com/)
+        - [我如何使用 Git LFS 來託付大型 Git 檔案？](https://www.webdong.dev/zh-tw/post/how-i-use-git-lfs-to-manage-large-git-files/)
+    ```
+    output/ (這裡放置你微調後的模型，不需要包括 checkpoint-* 資料夾，選擇 Best Model)
+    其它 .py 程式
+    README.md
+    ```
+    - `README.md` 要有詳細的說明（可參考 [這名同學的作業](https://github.com/huangcody/nlp_bert)），例如:
+    ```markdown
+    # 中文句子情緒分類
 
-		## 訓練資料來源
-		- [Datasets:Johnson8187/Chinese_Multi-Emotion_Dialogue_Dataset](https://huggingface.co/datasets/Johnson8187/Chinese_Multi-Emotion_Dialogue_Dataset)
+    ## 訓練資料來源
+    - [Datasets:Johnson8187/Chinese_Multi-Emotion_Dialogue_Dataset](https://huggingface.co/datasets/Johnson8187/Chinese_Multi-Emotion_Dialogue_Dataset)
 
-		## 基礎模型
-		- [google-bert/bert-base-chinese](https://huggingface.co/google-bert/bert-base-chinese)
+    ## 基礎模型
+    - [google-bert/bert-base-chinese](https://huggingface.co/google-bert/bert-base-chinese)
 
-        ## 安裝套件
-        - torch (版本號)
-		- torchvision (版本號)
-		- torchaudio (版本號)
-		- transformers (版本號)
-		- datasets (版本號)
-		- evaluate (版本號)
-		- accelerate (版本號)
-		- scikit-learn (版本號)
-		(版本號可用 pip list，或是 conda list 來檢視)
-        ...
+    ## 安裝套件
+    - torch (版本號)
+    - torchvision (版本號)
+    - torchaudio (版本號)
+    - transformers (版本號)
+    - datasets (版本號)
+    - evaluate (版本號)
+    - accelerate (版本號)
+    - scikit-learn (版本號)
+    (版本號可用 pip list，或是 conda list 來檢視)
+    ...
 
-		## 說明
-		(介紹你微調後的模型，主要用來做什麼的，例如你使用模型進行情緒分類，分成幾類…等等，再放上作業要求的 texts 預測結果，自由發揮)
+    ## 說明
+    (介紹你微調後的模型，主要用來做什麼的，例如你使用模型進行情緒分類，分成幾類…等等，再放上作業要求的 texts 預測結果，自由發揮)
 
-        ## 成果
-        ![](執行過程的擷圖或說明圖片)
-        ...
-        [影片名稱或其它標題](你的影片連結)
-        ...
+    ## 執行方法
+    python XXX.py
+    python XXX.py
+    python XXX.py
+    ...
 
-        ## 其它你想要補充標題和內容
-        ...
-        ...
-        ```
-	  - 可以參考以前學長的 README 撰寫方式: [FaceBook FanPage Scraper with selenium](https://github.com/nana89823/facebook_scraper)
-    - 沒交：`0` 分。
+    ## 成果
+    ![](執行過程的擷圖或說明圖片)
+    ...
+    [影片名稱或其它標題](你的影片連結)
+    ...
+
+    ## 其它你想要補充標題和內容
+    ...
+    ...
+    ```
+  - `微調從 Huggingface 下載的語言模型，建立可以多輪對話的「土味情話」或「幽默笑話」專家`
+	- `system prompt` 類似 `你是一個情話高手，你會以親切、溫和的口吻來回答使用者的問題。`，可依情境自訂。
+	- 多輪對話的範例（至少 `2` 輪）：
+	```
+    你：教我如何透過長相來認識女性朋友。
+    專家：你就跟他說「你長得很像我一個朋友」。
+    你：長得像你朋友？
+    專家：沒錯，跟她說「你長得像我下一任女朋友」。
+    你：那如果她問「你上一任女朋友呢？」
+    專家：你可以跟她說「前任從缺，下一任只正取一名」。
+    你：那如果她問「所以很多人報名嗎？」
+    專家：你就回答「目前採單獨招生，看到妳之後就停止收件」。
+    你：那如果她說「我又沒說要報名？」
+	專家：你就說「沒關係，我只是先把錄取通知準備好」。
+	```
+	- 語料（corpus）可以跟 ChatGPT/Claude/Gemini/Grok 等 AI 平台不斷討論來取得，再整理成多輪對話的訓練語料（corpus），也可以上網查詢或是從 YouTube 影片中抽取
+	- 要建立 `Github Repository`，同時 READMD.md 也要完整說明。
+  - `透過 RAG 建立健康諮詢小幫手`
+    - 資料庫的資料表，至少要有 `流水號`、`新聞標題`、`文章全文`、`文章摘要`、`新增時間`，可自行決定內容的豐富程度。
+	- 請使用網路爬蟲技術，取得 [健康醫療網](https://www.healthnews.com.tw/) 的 `新聞分類` 資料。
+	- `文章摘要` 可以先將 `新聞標題` 跟 `文章全文` 字串合併，然後透過 `地端模型` 來產生 `文章摘要`，字數不限。
+	- 將 `文章摘要` 轉換成 `向量`，儲存成 `向量索引`。
+	- 整合 `地端模型` 來建立 `問答系統`，系統以網頁形式展示，可以有 `checkbox` 來決定多輪對話是否進行檢索。
+	- 詢問 `2` 個不同的問題（與你取得的新聞資料有關），最後請系統將剛才詢問的問題，整理成重點後回答我們。
+	- 要建立 `Github Repository`，同時 READMD.md 也要完整說明。
+- 作業的 `Github Repository` 連結都要給我。
 - 繳交時間
-  - 原則上最後一堂課結束後 2 週內，準確時間上課說明。
+  - 原則上最後一堂課結束後 3 週內，準確時間上課說明。
