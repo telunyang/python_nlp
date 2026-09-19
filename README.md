@@ -42,10 +42,9 @@ Python 自然語言處理講義與範例
     - 使用 `GitHub` 平台來提交作業，並且將 `github repo 連結` 寄給我。
     - Git 與 GitHub 使用教學: [程式與網頁開發者必備技能！Git 和 GitHub 零基礎快速上手，輕鬆掌握版本控制的要訣！](https://www.youtube.com/watch?v=FKXRiAiQFiY)
     - Markdown 語法: [如何使用 Markdown 語言撰寫技術文件](https://experienceleague.adobe.com/zh-hant/docs/contributor/contributor-guide/writing-essentials/markdown)
-    - `repository` 裡面至少要有 `finetune.ipynb` 或 `finetune.py`，`predict.ipynb` 或 `predict.py`，還有 `README.md`，最重要的是你微調後的模型 `output` 資料夾。
     - 上傳大型檔案到 github 上，請參考：
-        - [Git Large File Storage - An open source Git extension for versioning large files](https://git-lfs.com/)
-        - [我如何使用 Git LFS 來託付大型 Git 檔案？](https://www.webdong.dev/zh-tw/post/how-i-use-git-lfs-to-manage-large-git-files/)
+      - [Git Large File Storage - An open source Git extension for versioning large files](https://git-lfs.com/)
+      - [我如何使用 Git LFS 來託付大型 Git 檔案？](https://www.webdong.dev/zh-tw/post/how-i-use-git-lfs-to-manage-large-git-files/)
     ```
     output/ (這裡放置你微調後的模型，不需要包括 checkpoint-* 資料夾，選擇 Best Model)
     其它 .py 程式
@@ -108,7 +107,7 @@ Python 自然語言處理講義與範例
 	專家：你就說「沒關係，我只是先把錄取通知準備好」。
 	```
 	- 語料（corpus）可以跟 ChatGPT/Claude/Gemini/Grok 等 AI 平台不斷討論來取得，再整理成多輪對話的訓練語料（corpus），也可以上網查詢或是從 YouTube 影片中抽取
-	- 要建立 `Github Repository`，同時 READMD.md 也要完整說明。
+	- 要建立 `github repository`，同時 READMD.md 也要完整說明。
   - `透過 RAG 建立健康諮詢小幫手`
     - 資料庫的資料表，至少要有 `流水號`、`新聞標題`、`文章全文`、`文章摘要`、`新增時間`，可自行決定內容的豐富程度。
 	- 請使用網路爬蟲技術，取得 [健康醫療網](https://www.healthnews.com.tw/) 的 `新聞分類` 資料。
@@ -116,7 +115,7 @@ Python 自然語言處理講義與範例
 	- 將 `文章摘要` 轉換成 `向量`，儲存成 `向量索引`。
 	- 整合 `地端模型` 來建立 `問答系統`，系統以網頁形式展示，可以有 `checkbox` 來決定多輪對話是否進行檢索。
 	- 詢問 `2` 個不同的問題（與你取得的新聞資料有關），最後請系統將剛才詢問的問題，整理成重點後回答我們。
-	- 要建立 `Github Repository`，同時 READMD.md 也要完整說明。
-- 作業的 `Github Repository` 連結都要給我。
+	- 要建立 `github repository`，同時 READMD.md 也要完整說明。
+- 作業的 `github repository 連結` 要寄給我。
 - 繳交時間
   - 原則上最後一堂課結束後 3 週內，準確時間上課說明。
