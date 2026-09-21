@@ -6,12 +6,12 @@
 - 使用 FAISS 建立向量索引
   - [安裝說明](https://github.com/facebookresearch/faiss/blob/main/INSTALL.md)
   - 安裝指令:
-    - `conda install pytorch::faiss-cpu==1.12.0`
-    - `pip install faiss-cpu==1.14.2`
+    - `pip install faiss-cpu==1.15.1`
+    - `conda install pytorch::faiss-cpu==1.14.3`
 - 安裝 Sentence Transformers
   - [安裝說明](https://sbert.net/docs/installation.html)
   - 安裝指令:
-    - `pip install -U sentence-transformers==5.5.1`
+    - `pip install -U sentence-transformers==6.1.0`
 - 範例模型
   - [Pretrained Models](https://sbert.net/docs/sentence_transformer/pretrained_models.html#semantic-search-models)
 - 執行程式

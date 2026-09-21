@@ -1,7 +1,7 @@
 import os
+import sqlite3
 from sentence_transformers import SentenceTransformer
 import faiss
-import json
 import numpy as np
 
 '''
@@ -24,20 +24,24 @@ index_path = './vector.index'
 # 讀取 model
 encoder = SentenceTransformer(model_name)
 
-# 讀取問答資料：「文件」與對應的「文件 ID」(需要 int64)
+# 讀取資料庫中的新聞標題與內容，並將其組合成文件
 docs = []
 doc_ids = []
-with open('./qa.json', 'r', encoding='utf-8') as f:
-    # 讀取 json 檔案
-    li_qa = json.loads(f.read())
+conn = sqlite3.connect('./news.db')
+cursor = conn.cursor()
+try:
+    # 查詢資料庫中的新聞標題與內容
+    rows = cursor.execute('SELECT id, title, content FROM news')
 
-    # 準備文件與文件 ID
-    for index, qa in enumerate(li_qa):
-        docs.append(qa['Q'])
-        doc_ids.append(index)
+    # 將新聞標題與內容組合作為文件，並保留資料庫中的新聞 ID
+    for news_id, title, content in rows:
+        docs.append(f'{title} {content}')
+        doc_ids.append(news_id)
+finally:
+    conn.close()
 
-    # 將 doc_ids 轉成 numpy array，並指定資料型態為 int64
-    doc_ids = np.array(doc_ids).astype('int64')
+# 將 doc_ids 轉成 numpy array，並指定資料型態為 int64
+doc_ids = np.array(doc_ids, dtype='int64')
 
 # 將所有句子轉換成向量，同時計算轉向量時間
 embeddings = encoder.encode(
