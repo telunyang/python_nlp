@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Laya 繁體中文決策展示</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="container">
+        <header>
+            <p class="eyebrow">Laya System One Demo</p>
+            <h1>繁體中文咖啡點餐決策展示</h1>
+            <p class="subtitle">
+                輸入一句點餐內容，直接查看 fine-tuned Laya 的
+                <strong>choice</strong>、<strong>noul</strong> 與 <strong>score</strong>。
+            </p>
+        </header>
+
+        <section class="panel">
+            <form method="post">
+                <label for="user_text">顧客說：</label>
+                <textarea id="user_text" name="user_text" rows="4"
+                          placeholder="例如：我要一杯冰拿鐵，加一份濃縮咖啡。">{{ user_text }}</textarea>
+                <button type="submit">讓 Laya 判斷</button>
+            </form>
+
+            <div class="examples">
+                <span>可以試：</span>
+                <code>我要一杯冰拿鐵，加一份濃縮咖啡。</code>
+                <code>我想喝咖啡。</code>
+                <code>我要一杯藍莓拿鐵。</code>
+            </div>
+        </section>
+
+        {% if error %}
+        <section class="error">
+            <strong>執行失敗：</strong> {{ error }}
+        </section>
+        {% endif %}
+
+        {% if answers %}
+        <section class="results">
+            <article class="card">
+                <p class="type">choice</p>
+                <h2>下一步行動</h2>
+                {% set choice = answers['next_action']['choice'] %}
+                <p class="big-result">
+                    {{ choice }} · {{ questions['next_action']['criteria'][choice] }}
+                </p>
+                <p class="meta">
+                    answer confidence：{{ '%.1f'|format(answers['next_action']['answer_confidence'] * 100) }}%
+                </p>
+
+                {% for key, value in answers['next_action']['probabilities'].items() %}
+                <div class="probability-row">
+                    <div class="probability-label">
+                        <span>{{ key }} · {{ questions['next_action']['criteria'][key] }}</span>
+                        <strong>{{ '%.1f'|format(value * 100) }}%</strong>
+                    </div>
+                    <div class="bar"><div class="fill" style="width: {{ value * 100 }}%"></div></div>
+                </div>
+                {% endfor %}
+            </article>
+
+            <article class="card">
+                <p class="type">noul</p>
+                <h2>現在可以直接確認嗎？</h2>
+                {% set p_true = answers['can_confirm']['noul'] %}
+                <p class="big-result">
+                    {% if p_true >= 0.5 %}可以確認{% else %}還不能確認{% endif %}
+                </p>
+                <p class="score-number">P(true) = {{ '%.1f'|format(p_true * 100) }}%</p>
+                <div class="bar large"><div class="fill" style="width: {{ p_true * 100 }}%"></div></div>
+                <p class="meta">
+                    answer confidence：{{ '%.1f'|format(answers['can_confirm']['answer_confidence'] * 100) }}%
+                </p>
+            </article>
+
+            <article class="card">
+                <p class="type">score</p>
+                <h2>訂單可確認程度</h2>
+                <p class="big-result">{{ '%.2f'|format(answers['readiness']['score']) }} / 2</p>
+                <p class="meta">
+                    answer confidence：{{ '%.1f'|format(answers['readiness']['answer_confidence'] * 100) }}%
+                </p>
+
+                {% for key, value in answers['readiness']['probabilities'].items() %}
+                <div class="probability-row">
+                    <div class="probability-label">
+                        <span>{{ key }} · {{ questions['readiness']['criteria'][key|int] }}</span>
+                        <strong>{{ '%.1f'|format(value * 100) }}%</strong>
+                    </div>
+                    <div class="bar"><div class="fill" style="width: {{ value * 100 }}%"></div></div>
+                </div>
+                {% endfor %}
+            </article>
+        </section>
+
+        <details class="raw">
+            <summary>查看原始 Laya 輸出</summary>
+            <pre>{{ answers | tojson(indent=2) }}</pre>
+        </details>
+        {% endif %}
+
+        <footer>
+            這個頁面直接呼叫 fine-tuned Laya，不經過 AG2 或 Ollama。
+        </footer>
+    </main>
+</body>
+</html>
