@@ -1,0 +1,17 @@
+# Laya 核心模型與訓練
+laya==0.3.20
+
+# 下載與讀取 Hugging Face 資料集
+datasets==5.0.1
+
+# Flask Web 展示介面
+Flask==3.1.3
+
+# AG2 Agent + Ollama 支援
+ag2[ollama]==1.1.0
+
+# 注意：
+# 不在這裡額外固定 torch / transformers / safetensors / huggingface_hub / numpy。
+# laya 會自動安裝這些相依套件。
+# 在 Google Colab 中也建議保留環境原本已配置好的 PyTorch/CUDA，
+# 避免因為重新安裝 torch 而造成 GPU / CUDA 版本不相容。

@@ -22,7 +22,7 @@ from laya.common import QTYPES, build_sequence, collate_items, proper_reward, re
 BASE_MODEL = "convaiinnovations/laya-multilingual"
 
 # 跑幾輪資料。越大通常學得更多，但也更慢，且可能過度記住訓練資料。
-EPOCHS = 2
+EPOCHS = 4
 
 # 一次放進 GPU 的 decision 數量。T4 建議從 2 開始；顯存夠可試 4。
 MICRO_BATCH = 2
